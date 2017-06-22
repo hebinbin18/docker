@@ -8,7 +8,7 @@ docker run -p 80:80 --name php-dev \
            -v $PWD/php/conf:/usr/local/php/etc \
            -v $PWD/php/logs:/usr/local/php/logs \
            -v $WorkSpace:/workspace \
-           -d test:1
+           -d c7.3:dev
 
 #docker exec -it -v $WorkSpace:/workspace nginx bash
 #docker rm -f nginx

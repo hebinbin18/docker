@@ -106,6 +106,9 @@ RUN set -xe \
             echo '/usr/local/php/sbin/php-fpm'; \
         } | tee /home/start_service.sh && chmod +x /home/start_service.sh
 
+# 清理安装文件
+RUN set -xe && rm -fr /home/src
+
 #EXPOSE 9000
 EXPOSE 80
 STOPSIGNAL SIGTERM
