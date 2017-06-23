@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 WorkSpace="/Users/hebin/workspace"
 
-docker run -p 80:80 --name php-dev \
+docker run --name php-dev \
            -v $PWD/nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf \
            -v $PWD/nginx/conf/server:/usr/local/nginx/conf/server \
            -v $PWD/nginx/logs:/usr/local/nginx/logs \
