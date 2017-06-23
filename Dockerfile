@@ -3,8 +3,8 @@
 # NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
 #
 # PLEASE DO NOT EDIT IT DIRECTLY.
-# docker build -t dev:php -f ./php/Dockerfile .
-# dk commit 0310424581be centos7.3:php-dev
+# docker build -t c7.3:dev -f Dockerfile .
+# dk commit 0310424581be c7.3:php-dev
 
 FROM centos:7.3.1611
 
