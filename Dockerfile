@@ -12,32 +12,32 @@ FROM centos:7.3.1611
 RUN set -ex \
 	&& cd /etc/yum.repos.d \
 	&& { \
-      		echo '[epel]'; \
-            echo 'name=Extra Packages for Enterprise Linux 7 - $basearch'; \
-            echo 'baseurl=http://mirrors.aliyun.com/epel/7/$basearch'; \
-            echo '        http://mirrors.aliyuncs.com/epel/7/$basearch'; \
-            echo 'failovermethod=priority'; \
-            echo 'enabled=1'; \
-            echo 'gpgcheck=0'; \
-            echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
-            echo; \
-            echo '[epel-debuginfo]'; \
-            echo 'name=Extra Packages for Enterprise Linux 7 - $basearch - Debug'; \
-            echo 'baseurl=http://mirrors.aliyun.com/epel/7/$basearch/debug'; \
-            echo '        http://mirrors.aliyuncs.com/epel/7/$basearch/debug'; \
-            echo 'failovermethod=priority'; \
-            echo 'enabled=0'; \
-            echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
-            echo 'gpgcheck=0'; \
-            echo; \
-            echo '[epel-source]'; \
-            echo 'name=Extra Packages for Enterprise Linux 7 - $basearch - Source'; \
-            echo 'baseurl=http://mirrors.aliyun.com/epel/7/SRPMS'; \
-            echo '        http://mirrors.aliyuncs.com/epel/7/SRPMS'; \
-            echo 'failovermethod=priority'; \
-            echo 'enabled=0'; \
-            echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
-            echo 'gpgcheck=0'; \
+        echo '[epel]'; \
+        echo 'name=Extra Packages for Enterprise Linux 7 - $basearch'; \
+        echo 'baseurl=http://mirrors.aliyun.com/epel/7/$basearch'; \
+        echo '        http://mirrors.aliyuncs.com/epel/7/$basearch'; \
+        echo 'failovermethod=priority'; \
+        echo 'enabled=1'; \
+        echo 'gpgcheck=0'; \
+        echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
+        echo; \
+        echo '[epel-debuginfo]'; \
+        echo 'name=Extra Packages for Enterprise Linux 7 - $basearch - Debug'; \
+        echo 'baseurl=http://mirrors.aliyun.com/epel/7/$basearch/debug'; \
+        echo '        http://mirrors.aliyuncs.com/epel/7/$basearch/debug'; \
+        echo 'failovermethod=priority'; \
+        echo 'enabled=0'; \
+        echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
+        echo 'gpgcheck=0'; \
+        echo; \
+        echo '[epel-source]'; \
+        echo 'name=Extra Packages for Enterprise Linux 7 - $basearch - Source'; \
+        echo 'baseurl=http://mirrors.aliyun.com/epel/7/SRPMS'; \
+        echo '        http://mirrors.aliyuncs.com/epel/7/SRPMS'; \
+        echo 'failovermethod=priority'; \
+        echo 'enabled=0'; \
+        echo 'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7'; \
+        echo 'gpgcheck=0'; \
     } | tee aliyun.repo \
     && yum -y update && yum install -y gcc make autoconf dpkg-dev file re2c glibc-headers gcc-c++ \
        libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 libedit libedit-devel\
@@ -48,13 +48,6 @@ RUN set -ex \
        icu libicu libicu-devel libtool-ltdl libtool-ltdl-devel wget ca-certificates \
        libmcrypt libmcrypt-devel \
     && rm -fr /var/cache/yum
-
-# bash语言环境的配置
-RUN { \
-        echo "LANG=en_US.UTF-8 LC_ALL="; \
-    } | tee /etc/environment \
-    && source /etc/environment \
-    && localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # nginx的安装
 ENV NGINX_VERSION="1.12.0"
@@ -97,22 +90,53 @@ RUN set -xe \
     && /usr/local/php/bin/pecl install imagick \
     && rm -rf /tmp/pear ~/.pearrc \
     && { \
-            echo 'date.timezone=PRC'; \
-            echo 'extension=mongodb.so'; \
-            echo 'extension=redis.so'; \
-            echo 'extension=imagick.so'; \
-            echo ';extension=opcache.so'; \
-        } | tee /usr/local/php/lib/php.ini
+        echo 'date.timezone=PRC'; \
+        echo 'extension=mongodb.so'; \
+        echo 'extension=redis.so'; \
+        echo 'extension=imagick.so'; \
+        echo ';extension=opcache.so'; \
+    } | tee /usr/local/php/lib/php.ini
+
+ENV GO_VERSION="1.8.3"
+ENV GO_URL="https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz"
 
 RUN set -xe \
+	&& cd /home/src \
+	&& wget -O go.tar.gz "$GO_URL" \
+    && tar -zxvf go.tar.gz -C /usr/local/ \
     && { \
-            echo '#!/bin/bash'; \
-            echo '/usr/local/nginx/sbin/nginx'; \
-            echo '/usr/local/php/sbin/php-fpm'; \
-        } | tee /home/start_service.sh && chmod +x /home/start_service.sh
+       echo '# .bash_profile'; \
+       echo ''; \
+       echo '# Get the aliases and functions'; \
+       echo 'if [ -f ~/.bashrc ]; then'; \
+       echo '        . ~/.bashrc'; \
+       echo 'fi'; \
+       echo ''; \
+       echo '# User specific environment and startup programs'; \
+       echo ''; \
+       echo 'export GOPATH=/workspace/gopath'; \
+       echo 'PATH=$PATH:$HOME/bin:/usr/local/php/bin/:/usr/local/go/bin:$GOPATH/bin'; \
+       echo ''; \
+       echo 'export PATH'; \
+   } | tee ~/.bash_profile
 
+# bash语言环境的配置
 # 清理安装文件
-RUN set -xe && rm -fr /home/src
+RUN set -xe \
+    && { \
+        echo "LANG=en_US.UTF-8"; \
+        echo "LC_ALL=en_US.UTF-8"; \
+    } | tee /etc/environment \
+    && source /etc/environment \
+    && localedef -i en_US -f UTF-8 en_US.UTF-8 \
+    && { \
+        echo '#!/bin/bash'; \
+        echo '/usr/local/nginx/sbin/nginx'; \
+        echo '/usr/local/php/sbin/php-fpm'; \
+        echo 'source ~/.bash_profile'; \
+    } | tee /home/start_service.sh \
+    && chmod +x /home/start_service.sh \
+    && rm -fr /home/src
 
 #EXPOSE 9000
 EXPOSE 80
