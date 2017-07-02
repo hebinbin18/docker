@@ -105,20 +105,18 @@ RUN set -xe \
 	&& wget -O go.tar.gz "$GO_URL" \
     && tar -zxvf go.tar.gz -C /usr/local/ \
     && { \
-       echo '# .bash_profile'; \
+       echo '#!/bin/bash'; \
        echo ''; \
-       echo '# Get the aliases and functions'; \
-       echo 'if [ -f ~/.bashrc ]; then'; \
-       echo '        . ~/.bashrc'; \
-       echo 'fi'; \
-       echo ''; \
-       echo '# User specific environment and startup programs'; \
-       echo ''; \
+       echo '# GoPATH'; \
        echo 'export GOPATH=/workspace/gopath'; \
        echo 'PATH=$PATH:$HOME/bin:/usr/local/php/bin/:/usr/local/go/bin:$GOPATH/bin'; \
        echo ''; \
        echo 'export PATH'; \
-   } | tee ~/.bash_profile
+       echo '# alias'; \
+       echo "alias l='ls -artl'"; \
+       echo ''; \
+   } | tee /etc/profile.d/gopath.sh
+
 
 # bash语言环境的配置
 # 清理安装文件
