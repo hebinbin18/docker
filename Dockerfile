@@ -79,9 +79,9 @@ RUN set -xe \
     --with-gmp --with-pear \
     && make && make install \
     && cd /home/src \
-    && wget -O ImageMagick-6.9.8-10.tar.gz ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.9.8-10.tar.gz \
-    && tar -zxvf ImageMagick-6.9.8-10.tar.gz \
-    && cd ImageMagick-6.9.8-10 && ./configure && make && make install
+    && wget -O ImageMagick-6.9.9-2.tar.gz ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.9.9-2.tar.gz \
+    && tar -zxvf ImageMagick-6.9.9-2.tar.gz \
+    && cd ImageMagick-6.9.9-2 && ./configure && make && make install
 
 RUN set -xe \
     && /usr/local/php/bin/pecl update-channels \
@@ -117,7 +117,6 @@ RUN set -xe \
        echo ''; \
    } | tee /etc/profile.d/gopath.sh
 
-
 # bash语言环境的配置
 # 清理安装文件
 RUN set -xe \
@@ -131,7 +130,6 @@ RUN set -xe \
         echo '#!/bin/bash'; \
         echo '/usr/local/nginx/sbin/nginx'; \
         echo '/usr/local/php/sbin/php-fpm'; \
-        echo 'source ~/.bash_profile'; \
     } | tee /home/start_service.sh \
     && chmod +x /home/start_service.sh \
     && rm -fr /home/src
