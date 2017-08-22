@@ -49,17 +49,6 @@ RUN set -ex \
        libmcrypt libmcrypt-devel \
     && rm -fr /var/cache/yum
 
-# nginx的安装
-ENV NGINX_VERSION="1.12.0"
-ENV NGINX_URL="http://nginx.org/download/nginx-1.12.0.tar.gz"
-
-RUN set -xe; \
-    mkdir -p /home/src; \
-	cd /home/src; \
-	wget -O nginx.tar.gz "$NGINX_URL"; \
-    tar -zxvf nginx.tar.gz; \
-    cd nginx-"$NGINX_VERSION" && ./configure && make && make install
-
 # php 的安装
 ENV PHP_VERSION="7.1.6"
 ENV PHP_URL="http://cn2.php.net/distributions/php-7.1.6.tar.bz2"
@@ -77,11 +66,13 @@ RUN set -xe \
     --with-mhash --with-xmlrpc --enable-zip --enable-soap --enable-sockets --enable-ftp \
     --enable-simplexml --enable-json --enable-exif --enable-dom --enable-intl --enable-pcntl \
     --with-gmp --with-pear \
-    && make && make install \
+    && make && make install
+
+RUN set -xe \
     && cd /home/src \
-    && wget -O ImageMagick-6.9.9-2.tar.gz ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.9.9-2.tar.gz \
-    && tar -zxvf ImageMagick-6.9.9-2.tar.gz \
-    && cd ImageMagick-6.9.9-2 && ./configure && make && make install
+    && wget -O ImageMagick-6.9.9-9.tar.gz ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick-6.9.9-9.tar.gz \
+    && tar -zxvf ImageMagick-6.9.9-9.tar.gz \
+    && cd ImageMagick-6.9.9-9 && ./configure && make && make install
 
 RUN set -xe \
     && /usr/local/php/bin/pecl update-channels \
@@ -100,6 +91,17 @@ RUN set -xe \
         echo 'extension=imagick.so'; \
         echo ';extension=opcache.so'; \
     } | tee /usr/local/php/lib/php.ini
+
+# nginx的安装
+ENV NGINX_VERSION="1.12.0"
+ENV NGINX_URL="http://nginx.org/download/nginx-1.12.0.tar.gz"
+
+RUN set -xe; \
+    mkdir -p /home/src; \
+	cd /home/src; \
+	wget -O nginx.tar.gz "$NGINX_URL"; \
+    tar -zxvf nginx.tar.gz; \
+    cd nginx-"$NGINX_VERSION" && ./configure --with-stream && make && make install
 
 ENV GO_VERSION="1.8.3"
 ENV GO_URL="https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz"

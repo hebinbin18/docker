@@ -4,7 +4,8 @@ WorkSpace="/Users/hebin/workspace"
 docker run --name php-dev \
            -p 0.0.0.0:80:80 -p 0.0.0.0:8080:8080 -p 0.0.0.0:6617:6617 -p 0.0.0.0:6618:6618 -p 0.0.0.0:6619:6619 -p 0.0.0.0:6620:6620 \
            -v $PWD/nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf \
-           -v $PWD/nginx/conf/server:/usr/local/nginx/conf/server \
+           -v $PWD/nginx/conf/http:/usr/local/nginx/conf/http \
+           -v $PWD/nginx/conf/stream:/usr/local/nginx/conf/stream \
            -v $PWD/nginx/logs:/usr/local/nginx/logs \
            -v $PWD/php/conf:/usr/local/php/etc \
            -v $PWD/php/logs:/usr/local/php/logs \
