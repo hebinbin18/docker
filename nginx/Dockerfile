@@ -27,7 +27,7 @@ RUN set -xe; \
 	cd /home/src; \
 	wget -O nginx.tar.gz "$NGINX_URL"; \
     tar -zxvf nginx.tar.gz; \
-    cd nginx-"$NGINX_VERSION" && ./configure && make && make install
+    cd nginx-"$NGINX_VERSION" && ./configure --add-module=nginx_tcp_proxy_module && make && make install
 
 # 清理安装文件
 RUN set -xe && rm -fr /home/src

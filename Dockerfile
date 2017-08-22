@@ -88,11 +88,15 @@ RUN set -xe \
     && /usr/local/php/bin/pecl install redis \
     && /usr/local/php/bin/pecl install mongodb \
     && /usr/local/php/bin/pecl install imagick \
+    && /usr/local/php/bin/pecl install grpc \
+    && /usr/local/php/bin/pecl install protobuf \
     && rm -rf /tmp/pear ~/.pearrc \
     && { \
         echo 'date.timezone=PRC'; \
         echo 'extension=mongodb.so'; \
         echo 'extension=redis.so'; \
+        echo 'extension=imagick.so'; \
+        echo 'extension=grpc.so'; \
         echo 'extension=imagick.so'; \
         echo ';extension=opcache.so'; \
     } | tee /usr/local/php/lib/php.ini
@@ -134,7 +138,6 @@ RUN set -xe \
     && chmod +x /home/start_service.sh \
     && rm -fr /home/src
 
-#EXPOSE 9000
 EXPOSE 80
 STOPSIGNAL SIGTERM
 #CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
