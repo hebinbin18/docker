@@ -150,6 +150,8 @@ RUN set -xe; \
     npm install -g bower && { echo '{"allow_root":true}'; } | tee /root/.bowerrc; \
     curl -o- -L https://yarnpkg.com/install.sh | bash;
 
+RUN yum -y install git;
+
 # bash语言环境的配置
 # 清理安装文件
 RUN set -xe \
